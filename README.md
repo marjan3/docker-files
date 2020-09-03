@@ -3,7 +3,12 @@
 
 ```
 $ docker build -t .
-$ 
+```
+
+or
+
+```
+$ docker compose up -d .
 ```
 ## Prerequisites
 * Bash
