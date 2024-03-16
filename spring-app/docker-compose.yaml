@@ -7,23 +7,23 @@ services:
       context: ..
       dockerfile: Dockerfile.springboot
     image: springboot-service
-    network_mode: "service:proxy"
-   deploy:
-     replicas: 1
-     resources:
-       limits:
-         cpus: "0.5"
-         memory: 300M
-     restart_policy:
-       condition: on-failure
-   healthcheck:
-     test:
-       - CMD
-       - 'curl --silent --fail localhost:9091/actuator/health 2>&1 | grep UP || exit 1'
-     interval: 1m
-     timeout: 10s
-     retries: 5
-     start_period: 20s
+    network_mode: 'service:proxy'
+  deploy:
+    replicas: 1
+    resources:
+      limits:
+        cpus: '0.5'
+        memory: 300M
+    restart_policy:
+      condition: on-failure
+  healthcheck:
+    test:
+      - CMD
+      - 'curl --silent --fail localhost:9091/actuator/health 2>&1 | grep UP || exit 1'
+    interval: 1m
+    timeout: 10s
+    retries: 5
+    start_period: 20s
   proxy:
     container_name: proxy-service
     build:

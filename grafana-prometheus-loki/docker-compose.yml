@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.23.0
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./prometheus:/etc/prometheus
+
+  grafana:
+    image: grafana/grafana:10.0.12
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    depends_on:
+      - loki
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+
+  loki:
+    image: grafana/loki:main-0a90f05
+    container_name: loki
+    ports:
+      - '3100:3100'
+      - '9095:9095'
+    volumes:
+      - ./loki:/etc/loki
+      - ./loki-data:/data
+    command: -config.file=/etc/loki/local-config.yml
